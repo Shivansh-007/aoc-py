@@ -1,3 +1,5 @@
+# Credit: https://github.com/salt-die/Advent-of-Code/tree/master/2021/aoc_helper
+
 import json
 import re
 import time
