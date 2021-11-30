@@ -1,0 +1,23 @@
+import aoc
+
+
+def parse_data():
+    with open("{input_file}") as f:
+        data = f.read()
+
+    return data
+
+
+data = parse_data()
+
+
+def part_one():
+    ...
+
+
+def part_two():
+    ...
+
+
+aoc.submit({day}, {year}, part_one)
+aoc.submit({day}, {year}, part_two)

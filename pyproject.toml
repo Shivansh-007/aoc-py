@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "advent-of-code"
+version = "0.1.0"
+description = ""
+authors = ["Shivansh-007 <shivansh-007@outlook.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+click = "^8.0.3"
+rich = "^10.15.1"
+httpx = "^0.21.1"
+python-dotenv = "^0.19.2"
+bs4 = "^0.0.1"
+
+[tool.poetry.dev-dependencies]
+black = "^21.11b1"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
