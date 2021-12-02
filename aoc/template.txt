@@ -1,14 +1,8 @@
 import aoc
+from aoc.utils import AoCInput
 
 
-def parse_data():
-    with open("{input_file}") as f:
-        data = f.read()
-
-    return data
-
-
-data = parse_data()
+data = AoCInput("{input_file}").get_ints()
 
 
 def part_one():
