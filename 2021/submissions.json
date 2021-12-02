@@ -9,5 +9,16 @@
             "solution": "1130",
             "1130": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 1! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
         }
+    },
+    "2": {
+        "1": {
+            "-2150351": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed -2150351.) [Return to Day 2]",
+            "solution": "2150351",
+            "2150351": "That's the right answer!  You are one gold star closer to finding the sleigh keys. [Continue to Part Two]"
+        },
+        "2": {
+            "solution": "1842742223",
+            "1842742223": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 2! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+        }
     }
 }

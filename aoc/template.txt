@@ -13,5 +13,5 @@ def part_two():
     ...
 
 
-aoc.submit({day}, {year}, part_one)
-aoc.submit({day}, {year}, part_two)
+#aoc.submit({day}, {year}, part_one)
+#aoc.submit({day}, {year}, part_two)

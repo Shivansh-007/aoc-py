@@ -13,9 +13,7 @@ from rich import print
 
 from aoc.constants import AOC_SESSION_COOKIE, SUBMISSIONS_FILE, ROOT, URL
 
-__all__ = (
-    "submit",
-)
+__all__ = ("submit",)
 
 
 def _seconds_to_most_relevant_unit(s):
@@ -69,12 +67,16 @@ def submit(day, year, solution: Callable):
     dt_wall = _seconds_to_most_relevant_unit(now_wall - start_wall)
     dt_cpu = _seconds_to_most_relevant_unit(now_cpu - start_cpu)
 
-    print(f'Timer [magenta]{year}.{day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU')
+    print(
+        f"Timer [magenta]{year}.{day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU"
+    )
 
     solution = str(solution)
 
     if solution in current:
-        print(f"Solution {solution} to part {part} has already been submitted, response was:")
+        print(
+            f"Solution {solution} to part {part} has already been submitted, response was:"
+        )
         _pretty_print(current[solution])
         return
 
@@ -83,7 +85,7 @@ def submit(day, year, solution: Callable):
         response = httpx.post(
             url=URL.format(day=day, year=year) + "/answer",
             cookies={"session": AOC_SESSION_COOKIE},
-            data={"level": part, "answer": solution}
+            data={"level": part, "answer": solution},
         )
 
         if response.is_error:
