@@ -18,6 +18,23 @@ __all__ = (
 )
 
 
+def _seconds_to_most_relevant_unit(s):
+    s *= 1e6
+    if s < 1000:
+        return f"{s:.3f}µs"
+
+    s /= 1000
+    if s < 1000:
+        return f"{s:.3f}ms"
+
+    s /= 1000
+    if s < 60:
+        return f"{s:.3f}s"
+
+    s /= 60
+    return f"{int(s):d}m {s/60%60:.3f}s"
+
+
 def submit(day, year, solution: Callable):
     """Submit an AoC solution. Submissions are cached."""
     day = str(day)
@@ -42,9 +59,17 @@ def submit(day, year, solution: Callable):
         )
         return
 
+    start_wall, start_cpu = time.perf_counter(), time.process_time()
     solution = solution()
+    now_wall, now_cpu = time.perf_counter(), time.process_time()
+
     if solution is None:
         return
+
+    dt_wall = _seconds_to_most_relevant_unit(now_wall - start_wall)
+    dt_cpu = _seconds_to_most_relevant_unit(now_cpu - start_cpu)
+
+    print(f'Timer [magenta]{year}.{day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU')
 
     solution = str(solution)
 

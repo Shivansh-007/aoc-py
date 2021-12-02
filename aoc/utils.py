@@ -5,7 +5,7 @@ __all__ = (
 
 
 class AoCInput:
-    def __init__(self, fname: str, mode: str = 'r') -> None:
+    def __init__(self, fname: str, mode: str = "r") -> None:
         self.path = open(fname, mode)
 
     def get_ints(self, use_regexp=False, regexp=r"-?\d+", as_tuple=False):
