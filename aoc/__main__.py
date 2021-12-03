@@ -1,11 +1,41 @@
-from datetime import datetime
+import time
+from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Union
 
 import click
 import httpx
 from rich import print
 
-from aoc.constants import AOC_SESSION_COOKIE, ROOT, TEMPLATE_FILE
+from aoc.constants import AOC_SESSION_COOKIE, EST, ROOT, TEMPLATE_FILE
+
+TIME_DURATION_UNITS = (
+    ("week", 60 * 60 * 24 * 7),
+    ("day", 60 * 60 * 24),
+    ("hour", 60 * 60),
+    ("min", 60),
+    ("second", 1),
+)
+SECONDS_DAY = 86400  # 60 * 60 * 24
+
+
+def _human_time_duration(seconds):
+    parts = []
+    for unit, div in TIME_DURATION_UNITS:
+        amount, seconds = divmod(int(seconds), div)
+        if amount > 0:
+            parts.append("{} {}{}".format(amount, unit, "" if amount == 1 else "s"))
+    return ", ".join(parts)
+
+
+def _time_left_till_problem(day: int, year: int) -> Union[tuple[datetime, timedelta], bool]:
+    """Calculate the amount of time left until midnight EST/UTC-5."""
+    # Change all time properties back to 00:00
+    problem_midnight = datetime.now(tz=EST).replace(
+        year=year, day=day, microsecond=0, second=0, minute=0, hour=0
+    )
+
+    return problem_midnight - datetime.now(tz=EST)
 
 
 @click.group()
@@ -28,19 +58,39 @@ def setup_aoc_year(ctx: click.Context, year: int) -> None:
 
 @cli.command(name="start")
 @click.option(
+    "-d",
     "--day",
     default=datetime.now().day,
     type=click.IntRange(1, 25),
 )
 @click.option(
+    "-y",
     "--year",
     default=datetime.now().year,
     type=int,
 )
+@click.option("-W", "--wait", is_flag=True, default=True, type=bool)
 @click.pass_context
-def start_aoc_day(ctx, day: int, year: int) -> None:
+def start_aoc_day(ctx, day: int, year: int, wait: bool) -> None:
+    time_left = _time_left_till_problem(day, year).total_seconds() if wait else -1
+
+    if time_left > 0:
+        if time_left > SECONDS_DAY:
+            print(f"[yellow]🕔🚀🕤 You are going too fast, you just skipped day {day - 1} of Aoc!")
+            return
+
+        # As a safe guard, the sleep duration is padded with 0.1 second to make sure we wake up after midnight.
+        sleep_seconds = time_left + 0.1
+        print(
+            f"[blue italic]Sleeping for {_human_time_duration(sleep_seconds)} until the next AoC puzzle :wave:[/]"
+        )
+        time.sleep(sleep_seconds)
+
     day_dir = Path(ROOT, f"{year}", f"{day:02}")
     if day_dir.exists():
+        print(
+            f"[red]Directory for day {day} is already setup at [blue]{day_dir.relative_to(Path.cwd().parent)}[/]"
+        )
         return
 
     if AOC_SESSION_COOKIE is None:
