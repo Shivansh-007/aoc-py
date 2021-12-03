@@ -16,6 +16,21 @@ more-itertools = "^8.12.0"
 
 [tool.poetry.dev-dependencies]
 black = "^21.11b1"
+isort = "^5.10.1"
+
+[tool.black]
+line-length = 110
+target-version = ['py310']
+include = '\.pyi?$'
+
+[tool.isort]
+profile = "black"
+atomic = true
+combine_as_imports = true
+include_trailing_comma = true
+line_length = 110
+multi_line_output = 3
+use_parentheses = true
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
