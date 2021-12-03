@@ -19,7 +19,7 @@ def part_two():
         for i in range(12):
             counted = [Counter(l) for l in zip(*lines)]
             # If 0 and 1 are equally common, keep values with a 1 in the position being considered.
-            mc_bit = '1' if counted[i]['0'] == counted[i]['1'] else counted[i].most_common()[0][0]
+            mc_bit = "1" if counted[i]["0"] == counted[i]["1"] else counted[i].most_common()[0][0]
             lines = [line for line in lines if line[i] == mc_bit]
         return int(lines[0], 2)
 
@@ -27,12 +27,12 @@ def part_two():
         for i in range(12):
             counted = [Counter(l) for l in zip(*lines)]
             # If 0 and 1 are equally common, keep values with a 0 in the position being considered.
-            lc_bit = '0' if counted[i]['0'] == counted[i]['1'] else counted[i].most_common()[-1][0]
+            lc_bit = "0" if counted[i]["0"] == counted[i]["1"] else counted[i].most_common()[-1][0]
             lines = [line for line in lines if line[i] == lc_bit]
         return int(lines[0], 2)
 
     return oxy_gen(data.copy()) * co2_scrub(data.copy())
 
 
-aoc.submit(3, 2021, part_one)
-aoc.submit(3, 2021, part_two)
+aoc.submit(part_one)
+aoc.submit(part_two)

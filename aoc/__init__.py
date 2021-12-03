@@ -1,5 +1,6 @@
 # Credit: https://github.com/salt-die/Advent-of-Code/tree/master/2021/aoc_helper
 
+import inspect
 import json
 import re
 import time
@@ -11,7 +12,7 @@ import bs4
 import httpx
 from rich import print
 
-from aoc.constants import AOC_SESSION_COOKIE, SUBMISSIONS_FILE, ROOT, URL
+from aoc.constants import AOC_SESSION_COOKIE, ROOT, SUBMISSIONS_FILE, URL
 
 __all__ = ("submit",)
 
@@ -33,9 +34,13 @@ def _seconds_to_most_relevant_unit(s):
     return f"{int(s):d}m {s/60%60:.3f}s"
 
 
-def submit(day, year, solution: Callable):
+def submit(solution: Callable):
     """Submit an AoC solution. Submissions are cached."""
-    day = str(day)
+    frame = inspect.stack()[1]
+    submission_file = Path(frame[0].f_code.co_filename).parents
+    day, year = submission_file[0].name, submission_file[1].name
+    day = str(int(day))
+
     submissions_file = Path(ROOT, f"{year}", SUBMISSIONS_FILE)
 
     match solution.__name__:
@@ -51,10 +56,7 @@ def submit(day, year, solution: Callable):
     current = submissions.setdefault(day, {"1": {}, "2": {}})[part]
 
     if "solution" in current:
-        print(
-            f"Day {day} part {part} has already been solved. "
-            f"The solution was:\n{current['solution']}."
-        )
+        print(f"Day {day} part {part} has already been solved. " f"The solution was:\n{current['solution']}.")
         return
 
     start_wall, start_cpu = time.perf_counter(), time.process_time()
@@ -67,16 +69,12 @@ def submit(day, year, solution: Callable):
     dt_wall = _seconds_to_most_relevant_unit(now_wall - start_wall)
     dt_cpu = _seconds_to_most_relevant_unit(now_cpu - start_cpu)
 
-    print(
-        f"Timer [magenta]{year}.{day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU"
-    )
+    print(f"Timer [magenta]{year}.{day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU")
 
     solution = str(solution)
 
     if solution in current:
-        print(
-            f"Solution {solution} to part {part} has already been submitted, response was:"
-        )
+        print(f"Solution {solution} to part {part} has already been submitted, response was:")
         _pretty_print(current[solution])
         return
 

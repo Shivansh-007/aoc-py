@@ -1,7 +1,6 @@
 import aoc
 from aoc.utils import AoCInput
 
-
 data = AoCInput("2021/02/input.txt").get_lines()
 data = [l.split(" ") for l in data]
 
@@ -36,5 +35,6 @@ def part_two():
                 aim -= int(x)
     return depth * horizontal
 
-aoc.submit(2, 2021, part_one)
-aoc.submit(2, 2021, part_two)
+
+aoc.submit(part_one)
+aoc.submit(part_two)

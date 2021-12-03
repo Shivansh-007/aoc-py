@@ -5,7 +5,7 @@ import click
 import httpx
 from rich import print
 
-from aoc.constants import ROOT, AOC_SESSION_COOKIE, TEMPLATE_FILE
+from aoc.constants import AOC_SESSION_COOKIE, ROOT, TEMPLATE_FILE
 
 
 @click.group()
@@ -20,9 +20,7 @@ def setup_aoc_year(ctx: click.Context, year: int) -> None:
     """Setup AoC for year <year.>"""
     new_dir = Path(ROOT, f"{year}")
     if new_dir.exists():
-        print(
-            f"[red]Looks like AoC is already setup for year [blue]{year}[/], good luck![/]"
-        )
+        print(f"[red]Looks like AoC is already setup for year [blue]{year}[/], good luck![/]")
     else:
         new_dir.mkdir()
         print(f"All done! ✨ 🍰 ✨ Good luck on AoC {year} journey!")
@@ -46,9 +44,7 @@ def start_aoc_day(ctx, day: int, year: int) -> None:
         return
 
     if AOC_SESSION_COOKIE is None:
-        print(
-            f"[red][bold]AOC_SESSION_COOKIE[/bold] not found in environment variables![/]"
-        )
+        print(f"[red][bold]AOC_SESSION_COOKIE[/bold] not found in environment variables![/]")
         return
 
     problem_input = httpx.get(
@@ -69,11 +65,7 @@ def start_aoc_day(ctx, day: int, year: int) -> None:
     input_file.write_text(problem_input.text)
 
     solution = Path(day_dir, "solution.py")
-    solution.write_text(
-        TEMPLATE_FILE.format(
-            input_file=input_file.relative_to(ROOT), day=day, year=year
-        )
-    )
+    solution.write_text(TEMPLATE_FILE.format(input_file=input_file.relative_to(ROOT), day=day))
     print(f"All done! ✨ 🍰 ✨ Good luck!")
 
 
