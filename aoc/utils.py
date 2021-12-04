@@ -8,6 +8,16 @@ class AoCInput:
     def __init__(self, fname: str, mode: str = "r") -> None:
         self.path = open(fname, mode)
 
+    @staticmethod
+    def extract_ints(raw: str):
+        """
+        Extract integers from a string.
+        """
+        import re
+
+        for match in re.findall(r'(\d+)', raw):
+            yield int(match)
+
     def get_ints(self, use_regexp=False, regexp=r"-?\d+", as_tuple=False):
         """
         Parse self.path containing whitespace delimited integers into a list of integers.
@@ -43,6 +53,9 @@ class AoCInput:
             return kind(map(str.lstrip, lines))
         else:
             return kind(lines)
+    
+    def get_raw(self) -> str:
+        return self.path.read()
 
 
 def chinese_remainder_theorem(moduli, residues):

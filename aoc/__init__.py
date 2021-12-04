@@ -4,6 +4,7 @@ import inspect
 import json
 import re
 import time
+import typing
 import webbrowser
 from pathlib import Path
 from typing import Callable
@@ -13,8 +14,9 @@ import httpx
 from rich import print
 
 from aoc.constants import AOC_SESSION_COOKIE, ROOT, SUBMISSIONS_FILE, URL
+from aoc.watcher import watch
 
-__all__ = ("submit",)
+__all__ = ("submit", "watch")
 
 
 def _seconds_to_most_relevant_unit(s):
@@ -34,23 +36,12 @@ def _seconds_to_most_relevant_unit(s):
     return f"{int(s):d}m {s/60%60:.3f}s"
 
 
-def submit(solution: Callable):
+def submit(solution: Callable, part: str, data: typing.Any, submission_file: typing.Sequence[Path]):
     """Submit an AoC solution. Submissions are cached."""
-    frame = inspect.stack()[1]
-    submission_file = Path(frame[0].f_code.co_filename).parents
     day, year = submission_file[0].name, submission_file[1].name
     day = str(int(day))
 
     submissions_file = Path(ROOT, f"{year}", SUBMISSIONS_FILE)
-
-    match solution.__name__:
-        case "part_one":
-            part = "1"
-        case "part_two":
-            part = "2"
-        case _:
-            print(f"[red]solution callable has bad name, [bold]{solution.__name__}[/]")
-            return
 
     submissions = json.loads(submissions_file.read_text())
     current = submissions.setdefault(day, {"1": {}, "2": {}})[part]
@@ -60,7 +51,7 @@ def submit(solution: Callable):
         return
 
     start_wall, start_cpu = time.perf_counter(), time.process_time()
-    solution = solution()
+    solution = solution(data)
     now_wall, now_cpu = time.perf_counter(), time.process_time()
 
     if solution is None:
