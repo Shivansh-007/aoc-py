@@ -1,5 +1,6 @@
 import inspect
 import json
+from operator import sub
 import os
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -21,7 +22,6 @@ def check_puzzle(part_one: typing.Callable, part_two: typing.Callable, data: typ
     submissions_file = Path(ROOT, f"{year}", SUBMISSIONS_FILE)
     submissions = json.loads(submissions_file.read_text())
 
-    solution, part = part_one, "1"
     try:
         submissions[day]["1"]["solution"]
     except KeyError:
@@ -60,6 +60,15 @@ class ModificationWatcher(FileSystemEventHandler):
         self.part_one = part_one
         self.part_two = part_two
 
+    def reload_functions(self):
+        # HACK Please don't do this
+        solution = Path(self.submission_file[0], "solution.py")
+        with open(solution) as f:
+            code = compile(f.read(), solution, 'exec')
+            exec(code, globals(), locals())
+
+        print(globals())
+
     def on_modified(self, event: FileSystemEvent):
         # On Linux and inside the container, it will double report file change so 
         # this prevents that from happening.
@@ -68,6 +77,7 @@ class ModificationWatcher(FileSystemEventHandler):
         else:
             self.last_modified = datetime.now()
 
+        self.reload_functions()
         clear_screen()
         check_puzzle(self.part_one, self.part_two, self.data, self.submission_file)
 
@@ -82,7 +92,7 @@ def watch(part_one: typing.Callable, part_two: typing.Callable, data: typing.Any
     observer.start()
 
     try:
-        0
+        check_puzzle(part_one, part_two, data, submission_file)
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
