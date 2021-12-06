@@ -47,9 +47,7 @@ def check_puzzle(event: "ModificationWatcher"):
             solution, part = event.part_two, "2"
         else:
             print("[green]✅ Both are submitted :D[/]")
-            exit()
-
-    print(f"{solution} of {part}...")
+            return True
 
     example_answers_file = Path(ROOT, f"{event.year}", EXAMPLE_ANSWERS_FILE)
     eg_answers = json.loads(example_answers_file.read_text())
@@ -82,39 +80,36 @@ class ModificationWatcher(FileSystemEventHandler):
         self.year = self.caller_puzzle.parent.parent.name
 
         sys.path.append(str(self.caller_puzzle.parent))
-
-        self.part_one, self.part_two, self.data = None, None, None
-        self.get_p1_p2()
+        import solution
+        self.solution_module = solution
+        self.part_one, self.part_two = solution.part_one, solution.part_two
 
         self.data = Path(caller_puzzle.parent, "input.txt").read_text()
 
-    def get_p1_p2(self):
-        print("imported...")
-        from solution import part_one, part_two
+    def reload(self):
+        import importlib
 
-        print("imported...")
-        self.part_one, self.part_two = part_one, part_two
+        self.solution_module = importlib.reload(self.solution_module)
+        self.part_one, self.part_two = self.solution_module.part_one, self.solution_module.part_two
 
     def on_modified(self, event: FileSystemEvent):
-        print("Modified")
         # On Linux and inside the container, it will double report file change so
         # this prevents that from happening.
         if datetime.now() - self.last_modified < timedelta(seconds=1):
-            print("returning...")
             return
         else:
             self.last_modified = datetime.now()
 
-        self.get_p1_p2()
+        self.reload()
         clear_screen()
-        print("checking...")
-        check_puzzle(self)
+        is_finished = check_puzzle(self)
+        if is_finished:
+            exit()
 
 
 def watch():
     frame = inspect.stack()[1]
     caller_puzzle = Path(frame[0].f_code.co_filename)
-    print(caller_puzzle.parent)
 
     event_handler = ModificationWatcher(caller_puzzle)
     observer = Observer()
@@ -122,7 +117,9 @@ def watch():
     observer.start()
 
     try:
-        check_puzzle(event_handler)
+        is_finished = check_puzzle(event_handler)
+        if is_finished:
+            exit()
         while True:
             time.sleep(1)
     except KeyboardInterrupt:

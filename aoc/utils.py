@@ -35,7 +35,8 @@ class AoCInput:
         Returns a list of strings by default, or a tuple if as_tuple=True.
         """
         kind = tuple if as_tuple else list
-        lines = map(lambda l: l.rstrip("\n"), raw.split())
+        lines = map(lambda l: l.rstrip("\n"), raw.split("\n"))
+        lines = [line for line in lines if line != '']
 
         if rstrip and lstrip:
             return kind(map(str.strip, lines))
@@ -46,8 +47,9 @@ class AoCInput:
         else:
             return kind(lines)
 
-    def get_raw(self, path: Path) -> str:
-        return path.read_text()
+    @staticmethod
+    def get_raw(path: str) -> str:
+        return Path(path).read_text()
 
 
 def chinese_remainder_theorem(moduli, residues):
