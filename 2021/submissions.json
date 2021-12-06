@@ -28,7 +28,17 @@
         },
         "2": {
             "solution": "2795310",
-            "2795310": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 2! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+            "2795310": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 3! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+        }
+    },
+    "4": {
+        "1": {
+            "solution": "16716",
+            "16716": "That's the right answer!  You are one gold star closer to finding the sleigh keys. [Continue to Part Two]"
+        },
+        "2": {
+            "solution": "4880",
+            "4880": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 4! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
         }
     }
 }

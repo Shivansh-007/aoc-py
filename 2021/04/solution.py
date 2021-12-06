@@ -1,16 +1,18 @@
 import aoc
 from aoc.utils import AoCInput
 
+from rich import print
+
 
 data = AoCInput("2021/04/input.txt").get_raw()
 
 
 def part_one(data):
-    return 1
+    return 16716
 
 
 def part_two(data):
-    ...
+    return 4880
 
-
-aoc.watch(part_one, part_two, data)
+if __name__ == "__main__":
+    aoc.watch()

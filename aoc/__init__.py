@@ -14,7 +14,7 @@ import httpx
 from rich import print
 
 from aoc.constants import AOC_SESSION_COOKIE, ROOT, SUBMISSIONS_FILE, URL
-from aoc.watcher import watch
+from aoc.watcher import ModificationWatcher, watch
 
 __all__ = ("submit", "watch")
 
@@ -36,22 +36,19 @@ def _seconds_to_most_relevant_unit(s):
     return f"{int(s):d}m {s/60%60:.3f}s"
 
 
-def submit(solution: Callable, part: str, data: typing.Any, submission_file: typing.Sequence[Path]):
+def submit(event: "ModificationWatcher", part: str, solution: typing.Callable):
     """Submit an AoC solution. Submissions are cached."""
-    day, year = submission_file[0].name, submission_file[1].name
-    day = str(int(day))
-
-    submissions_file = Path(ROOT, f"{year}", SUBMISSIONS_FILE)
+    submissions_file = Path(ROOT, f"{event.year}", SUBMISSIONS_FILE)
 
     submissions = json.loads(submissions_file.read_text())
-    current = submissions.setdefault(day, {"1": {}, "2": {}})[part]
+    current = submissions.setdefault(event.day, {"1": {}, "2": {}})[part]
 
     if "solution" in current:
-        print(f"Day {day} part {part} has already been solved. " f"The solution was:\n{current['solution']}.")
+        print(f"event.day {event.day} part {part} has already been solved. " f"The solution was:\n{current['solution']}.")
         return
 
     start_wall, start_cpu = time.perf_counter(), time.process_time()
-    solution = solution(data)
+    solution = solution(event.data)
     now_wall, now_cpu = time.perf_counter(), time.process_time()
 
     if solution is None:
@@ -60,7 +57,7 @@ def submit(solution: Callable, part: str, data: typing.Any, submission_file: typ
     dt_wall = _seconds_to_most_relevant_unit(now_wall - start_wall)
     dt_cpu = _seconds_to_most_relevant_unit(now_cpu - start_cpu)
 
-    print(f"Timer [magenta]{year}.{day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU")
+    print(f"Timer [magenta]{event.year}.{event.day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU")
 
     solution = str(solution)
 
@@ -72,7 +69,7 @@ def submit(solution: Callable, part: str, data: typing.Any, submission_file: typ
     while True:
         print(f"Submitting [green bold]{solution}[/] as solution to part {part}...")
         response = httpx.post(
-            url=URL.format(day=day, year=year) + "/answer",
+            url=URL.format(day=event.day, year=event.year) + "/answer",
             cookies={"session": AOC_SESSION_COOKIE},
             data={"level": part, "answer": solution},
         )
