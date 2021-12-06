@@ -1,5 +1,6 @@
 # Credit: https://github.com/salt-die/Advent-of-Code/tree/master/2021/aoc_helper
 
+from ast import literal_eval
 import inspect
 import json
 import re
@@ -16,7 +17,27 @@ from rich import print
 from aoc.constants import AOC_SESSION_COOKIE, ROOT, SUBMISSIONS_FILE, URL
 from aoc.watcher import ModificationWatcher, watch
 
-__all__ = ("submit", "watch")
+__all__ = ("submit", "watch", "get_problem_examples")
+
+
+def get_problem_examples(request) -> tuple[str, ...]:
+    soup = bs4.BeautifulSoup(request.text, "lxml")
+    test_input = soup.pre.text.strip()
+
+    current_part = soup.find_all("article")[-1]
+    last_sentence = current_part.find_all("p")[-2]
+    answer = last_sentence.find_all("code")[-1]
+    if not answer.em:
+        answer = last_sentence.find_all("em")[-1]
+
+    answer = answer.text.strip().split()[-1]
+    try:
+        answer = literal_eval(answer)
+    except ValueError:
+        pass
+
+    return test_input, str(answer)
+
 
 
 def _seconds_to_most_relevant_unit(s):

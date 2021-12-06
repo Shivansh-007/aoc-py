@@ -1,17 +1,14 @@
 import aoc
 from aoc.utils import AoCInput
 
-
-data = AoCInput("{input_file}").get_ints()
-
-
-def part_one():
+def part_one(data):
+    data = AoCInput.get_ints(data)
     ...
 
 
-def part_two():
+def part_two(data):
+    data = AoCInput.get_ints(data)
     ...
 
-
-aoc.submit(part_one)
-aoc.submit(part_two)
+aoc.watch()
+aoc.watch()

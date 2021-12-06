@@ -1,4 +1,3 @@
-from ast import literal_eval
 import json
 import time
 from datetime import datetime, timedelta
@@ -9,6 +8,7 @@ import bs4
 import click
 import httpx
 from rich import print
+from aoc import get_problem_examples
 
 from aoc.constants import AOC_SESSION_COOKIE, EST, EXAMPLE_ANSWERS_FILE, ROOT, TEMPLATE_FILE
 
@@ -39,25 +39,6 @@ def _time_left_till_problem(day: int, year: int) -> Union[tuple[datetime, timede
     )
 
     return problem_midnight - datetime.now(tz=EST)
-
-def _get_problem_exampels(request) -> tuple[str, ...]:
-    soup = bs4.BeautifulSoup(request.text, "lxml")
-    test_input = soup.pre.text.strip()
-
-    current_part = soup.find_all("article")[-1]
-    last_sentence = current_part.find_all("p")[-2]
-    answer = last_sentence.find_all("code")[-1]
-    if not answer.em:
-        answer = last_sentence.find_all("em")[-1]
-
-    answer = answer.text.strip().split()[-1]
-    try:
-        answer = literal_eval(answer)
-    except ValueError:
-        pass
-
-    return test_input, str(answer)
-
 
 @click.group()
 def cli():
@@ -141,7 +122,7 @@ def start_aoc_day(ctx, day: int, year: int, wait: bool) -> None:
         f"https://adventofcode.com/{year}/day/{day}",
         cookies={"session": AOC_SESSION_COOKIE},
     )
-    test_input, answer = _get_problem_exampels(problem)
+    test_input, answer = get_problem_examples(problem)
     eg_answers = json.loads(example_answers_file.read_text())
     # Just write the part 1 answer has we have not finished it yet, so we won't be having the inputs :(
     eg_answers.setdefault(day, {"1": "", "2": ""})["1"] = answer
