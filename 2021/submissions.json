@@ -30,5 +30,37 @@
             "solution": "2795310",
             "2795310": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 2! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
         }
+    },
+    "4": {
+        "1": {
+            "solution": "16716",
+            "16716": "That's the right answer!  You are one gold star closer to finding the sleigh keys. [Continue to Part Two]",
+            "13797": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 13797.) [Return to Day 4]"
+        },
+        "2": {
+            "solution": "4880",
+            "4880": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 4! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+        }
+    },
+    "5": {
+        "1": {
+            "solution": "8060",
+            "21556": "That's the right answer!  You are one gold star closer to finding the sleigh keys. [Continue to Part Two]"
+        },
+        "2": {
+            "solution": "21577",
+            "21577": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 5! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar].",
+            "13010": "That's not the right answer.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 13010.) [Return to Day 5]",
+        }
+    },
+    "6": {
+        "1": {
+            "solution": "379414",
+            "379414": "That's the right answer!  You are one gold star closer to finding the sleigh keys. [Continue to Part Two]"
+        },
+        "2": {
+            "solution": "1705008653296",
+            "1705008653296": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 6! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+        }
     }
 }
