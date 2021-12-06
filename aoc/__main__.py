@@ -10,7 +10,7 @@ import httpx
 from rich import print
 
 from aoc import get_problem_examples
-from aoc.constants import AOC_SESSION_COOKIE, EST, EXAMPLE_ANSWERS_FILE, ROOT, TEMPLATE_FILE
+from aoc.constants import AOC_SESSION_COOKIE, EST, EXAMPLE_ANSWERS_FILE, ROOT, SUBMISSIONS_FILE, TEMPLATE_FILE
 
 TIME_DURATION_UNITS = (
     ("week", 60 * 60 * 24 * 7),
@@ -56,6 +56,12 @@ def setup_aoc_year(ctx: click.Context, year: int) -> None:
         print(f"[red]Looks like AoC is already setup for year [blue]{year}[/], good luck![/]")
     else:
         new_dir.mkdir()
+
+        with open(Path(new_dir, EXAMPLE_ANSWERS_FILE), "w+") as file:
+            json.dump({}, file)
+        with open(Path(new_dir, SUBMISSIONS_FILE), "w+") as file:
+            json.dump({}, file)
+
         print(f"All done! ✨ 🍰 ✨ Good luck on AoC {year} journey!")
 
 
