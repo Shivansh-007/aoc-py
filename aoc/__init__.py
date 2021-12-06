@@ -1,12 +1,12 @@
 # Credit: https://github.com/salt-die/Advent-of-Code/tree/master/2021/aoc_helper
 
-from ast import literal_eval
 import inspect
 import json
 import re
 import time
 import typing
 import webbrowser
+from ast import literal_eval
 from pathlib import Path
 from typing import Callable
 
@@ -39,7 +39,6 @@ def get_problem_examples(request) -> tuple[str, ...]:
     return test_input, str(answer)
 
 
-
 def _seconds_to_most_relevant_unit(s):
     s *= 1e6
     if s < 1000:
@@ -65,7 +64,10 @@ def submit(event: "ModificationWatcher", part: str, solution: typing.Callable):
     current = submissions.setdefault(event.day, {"1": {}, "2": {}})[part]
 
     if "solution" in current:
-        print(f"event.day {event.day} part {part} has already been solved. " f"The solution was:\n{current['solution']}.")
+        print(
+            f"event.day {event.day} part {part} has already been solved. "
+            f"The solution was:\n{current['solution']}."
+        )
         return
 
     start_wall, start_cpu = time.perf_counter(), time.process_time()
@@ -78,7 +80,9 @@ def submit(event: "ModificationWatcher", part: str, solution: typing.Callable):
     dt_wall = _seconds_to_most_relevant_unit(now_wall - start_wall)
     dt_cpu = _seconds_to_most_relevant_unit(now_cpu - start_cpu)
 
-    print(f"Timer [magenta]{event.year}.{event.day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU")
+    print(
+        f"Timer [magenta]{event.year}.{event.day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU"
+    )
 
     solution = str(solution)
 

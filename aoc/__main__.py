@@ -8,8 +8,8 @@ import bs4
 import click
 import httpx
 from rich import print
-from aoc import get_problem_examples
 
+from aoc import get_problem_examples
 from aoc.constants import AOC_SESSION_COOKIE, EST, EXAMPLE_ANSWERS_FILE, ROOT, TEMPLATE_FILE
 
 TIME_DURATION_UNITS = (
@@ -39,6 +39,7 @@ def _time_left_till_problem(day: int, year: int) -> Union[tuple[datetime, timede
     )
 
     return problem_midnight - datetime.now(tz=EST)
+
 
 @click.group()
 def cli():
@@ -131,11 +132,7 @@ def start_aoc_day(ctx, day: int, year: int, wait: bool) -> None:
 
     # Make copy of solution template for the puzzle
     solution = Path(day_dir, "solution.py")
-    solution.write_text(
-        TEMPLATE_FILE.format(
-            input_file=input_file.relative_to(ROOT), day=day
-        )
-    )
+    solution.write_text(TEMPLATE_FILE.format(input_file=input_file.relative_to(ROOT), day=day))
 
     print("All done! ✨ 🍰 ✨ Good luck!")
 

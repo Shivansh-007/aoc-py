@@ -45,7 +45,7 @@ class AoCInput:
             return kind(map(str.lstrip, lines))
         else:
             return kind(lines)
-    
+
     def get_raw(self, path: Path) -> str:
         return path.read_text()
 

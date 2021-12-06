@@ -1,22 +1,23 @@
-from email import message
 import inspect
 import json
 import os
 import sys
 import time
 from datetime import datetime, timedelta
+from email import message
 from pathlib import Path
-import httpx
 
+import httpx
 from rich import print
-from watchdog.observers import Observer
 from watchdog.events import FileSystemEvent, FileSystemEventHandler
+from watchdog.observers import Observer
 
 from aoc.constants import AOC_SESSION_COOKIE, EXAMPLE_ANSWERS_FILE, ROOT, SUBMISSIONS_FILE
 
 
 def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system("cls" if os.name == "nt" else "clear")
+
 
 def check_puzzle(event: "ModificationWatcher"):
     # If this part is already submitted, we can close the observer
@@ -42,7 +43,7 @@ def check_puzzle(event: "ModificationWatcher"):
             eg_answers = json.loads(example_answers_file.read_text())
             eg_answers[event.day]["2"] = answer
             example_answers_file.write_text(json.dumps(eg_answers, indent=4))
-            
+
             solution, part = event.part_two, "2"
         else:
             print("[green]✅ Both are submitted :D[/]")
@@ -58,15 +59,19 @@ def check_puzzle(event: "ModificationWatcher"):
         print(f"[green]✅ Successfully ran day {event.day} part {part} tests![/]")
 
         from aoc import submit
+
         submit(event, part, solution)
-      
+
         check_puzzle(event)
     else:
-        print(message := f"[red]❌ Testing of day {event.day} part {part} failed! Please try again. Here's the output:[/]")
+        print(
+            message := f"[red]❌ Testing of day {event.day} part {part} failed! Please try again. Here's the output:[/]"
+        )
         print(f"\t[green]Expected: {test_data_answer}")
         print(f"\t[red]Recieved: {sol_return}")
-        print(len(message)*"=")
+        print(len(message) * "=")
         return
+
 
 class ModificationWatcher(FileSystemEventHandler):
     def __init__(self, caller_puzzle: Path):
@@ -86,12 +91,13 @@ class ModificationWatcher(FileSystemEventHandler):
     def get_p1_p2(self):
         print("imported...")
         from solution import part_one, part_two
+
         print("imported...")
         self.part_one, self.part_two = part_one, part_two
 
     def on_modified(self, event: FileSystemEvent):
         print("Modified")
-        # On Linux and inside the container, it will double report file change so 
+        # On Linux and inside the container, it will double report file change so
         # this prevents that from happening.
         if datetime.now() - self.last_modified < timedelta(seconds=1):
             print("returning...")
