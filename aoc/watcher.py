@@ -81,6 +81,7 @@ class ModificationWatcher(FileSystemEventHandler):
 
         sys.path.append(str(self.caller_puzzle.parent))
         import solution
+
         self.solution_module = solution
         self.part_one, self.part_two = solution.part_one, solution.part_two
 

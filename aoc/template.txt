@@ -1,14 +1,21 @@
 import aoc
 from aoc.utils import AoCInput
 
-def part_one(data):
-    data = AoCInput.get_ints(data)
+
+def parse_data(raw):
+    data = AoCInput.get_lines(raw)
     ...
 
 
-def part_two(data):
-    data = AoCInput.get_ints(data)
+def part_one(raw):
+    data = parse_data(raw)
     ...
 
-aoc.watch()
-aoc.watch()
+
+def part_two(raw):
+    data = parse_data(raw)
+    ...
+
+
+if __name__ == "__main__":
+    aoc.watch()

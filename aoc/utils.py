@@ -36,7 +36,7 @@ class AoCInput:
         """
         kind = tuple if as_tuple else list
         lines = map(lambda l: l.rstrip("\n"), raw.split("\n"))
-        lines = [line for line in lines if line != '']
+        lines = [line for line in lines if line != ""]
 
         if rstrip and lstrip:
             return kind(map(str.strip, lines))
