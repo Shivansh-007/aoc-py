@@ -13,13 +13,18 @@ $ poetry install
 
 ### Usage
 
-- *Setup a template for a day's puzzle*
+- **Setup a template for a day's puzzle**
     ```bash
     $ python -m aoc start --day {day}
     ```
 
-- *Run and submit the solution*
+- **Open the watch shell**
+    
+    This will try to verify the completition of the puzzle solution by running the test examples scrapped for the puzzle page. If the tests are successfuly, it will go ahead and submit the answer to adventofcode.com, depending on the result you either continue with part 2 or fix your part 1 solution. The samething repeates with part 2.
+
+    The watch shell is semi-pretty with help of rich :D 
     ```bash
     $ python -m 2021.{day}.solution
     ```
+
 
