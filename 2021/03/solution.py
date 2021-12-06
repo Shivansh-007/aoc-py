@@ -3,10 +3,14 @@ from collections import Counter
 import aoc
 from aoc.utils import AoCInput
 
-data = AoCInput("2021/03/input.txt").get_lines()
+
+def parse_data(raw):
+    return AoCInput.get_lines(raw)
 
 
-def part_one():
+def part_one(raw):
+    data = parse_data(raw)
+
     counted = [Counter(l) for l in zip(*data)]
     gamma = "".join(col.most_common()[0][0] for col in counted)
     epsilon = "".join(col.most_common()[-1][0] for col in counted)
@@ -14,7 +18,9 @@ def part_one():
     return int(gamma, base=2) * int(epsilon, base=2)
 
 
-def part_two():
+def part_two(raw):
+    data = parse_data(raw)
+
     def oxy_gen(lines):
         for i in range(12):
             counted = [Counter(l) for l in zip(*lines)]
@@ -34,5 +40,5 @@ def part_two():
     return oxy_gen(data.copy()) * co2_scrub(data.copy())
 
 
-aoc.submit(part_one)
-aoc.submit(part_two)
+if __name__ == "__main__":
+    aoc.watch()

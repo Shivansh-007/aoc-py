@@ -1,11 +1,14 @@
 import aoc
 from aoc.utils import AoCInput
 
-data = AoCInput("2021/02/input.txt").get_lines()
-data = [l.split(" ") for l in data]
+
+def parse_data(raw):
+    data = AoCInput.get_lines(raw)
+    return [l.split(" ") for l in data]
 
 
-def part_one():
+def part_one(raw):
+    data = parse_data(raw)
     depth = 0
     horizontal = 0
     for (command, x) in data:
@@ -19,7 +22,8 @@ def part_one():
     return depth * horizontal
 
 
-def part_two():
+def part_two(raw):
+    data = parse_data(raw)
     aim = 0
     depth = 0
     horizontal = 0
@@ -36,5 +40,5 @@ def part_two():
     return depth * horizontal
 
 
-aoc.submit(part_one)
-aoc.submit(part_two)
+if __name__ == "__main__":
+    aoc.watch()

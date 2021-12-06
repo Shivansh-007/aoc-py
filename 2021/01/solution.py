@@ -5,16 +5,20 @@ from more_itertools import triplewise
 import aoc
 from aoc.utils import AoCInput
 
-data = AoCInput("2021/01/input.txt").get_ints()
+
+def parse_data(raw):
+    return AoCInput.get_ints(raw)
 
 
-def part_one():
+def part_one(raw):
+    data = parse_data(raw)
     return sum(y > x for x, y in pairwise(data))
 
 
-def part_two():
+def part_two(raw):
+    data = parse_data(raw)
     return sum(y > x for x, y in pairwise(sum(i) for i in triplewise(data)))
 
 
-aoc.submit(part_one)
-aoc.submit(part_two)
+if __name__ == "__main__":
+    aoc.watch()

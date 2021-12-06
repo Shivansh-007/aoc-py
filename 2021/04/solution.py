@@ -6,9 +6,12 @@ from more_itertools import grouper
 import aoc
 from aoc.utils import AoCInput
 
-data = AoCInput("2021/04/input.txt").get_lines()
-numbers = [int(x) for x in data[0].split(",")]
-boards = list(map(lambda b: [list(map(int, l.split())) for l in b[:-1]], grouper(data[2:], 6)))
+
+def parse_data(raw):
+    data = AoCInput.get_lines(raw)
+    numbers = [int(x) for x in data[0].split(",")]
+    boards = list(map(lambda b: [list(map(int, l.split())) for l in b[:-1]], grouper(data[2:], 6)))
+    return numbers, boards
 
 
 def check_board_win(board, marked) -> bool:
@@ -20,7 +23,9 @@ def check_board_win(board, marked) -> bool:
     )
 
 
-def part_one():
+def part_one(raw):
+    numbers, boards = parse_data(raw)
+
     marked = set()
     for n in numbers:
         marked.add(n)
@@ -30,7 +35,9 @@ def part_one():
             return sum(set(reduce(add, _boards[0])) - marked) * n
 
 
-def part_two():
+def part_two(raw):
+    numbers, boards = parse_data(raw)
+
     marked = set()
     _boards = boards.copy()
     for n in numbers:
@@ -44,5 +51,5 @@ def part_two():
     return sum(set(reduce(add, _boards[0])) - marked) * n
 
 
-aoc.submit(part_one)
-aoc.submit(part_two)
+if __name__ == "__main__":
+    aoc.watch()

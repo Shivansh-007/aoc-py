@@ -1,0 +1,7 @@
+{
+    "2": {
+        "1": "150",
+        "2": "900",
+        "input": "forward 5\ndown 5\nforward 8\nup 3\ndown 8\nforward 2"
+    }
+}

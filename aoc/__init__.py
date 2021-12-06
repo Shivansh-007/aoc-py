@@ -4,7 +4,9 @@ import inspect
 import json
 import re
 import time
+import typing
 import webbrowser
+from ast import literal_eval
 from pathlib import Path
 from typing import Callable
 
@@ -13,8 +15,28 @@ import httpx
 from rich import print
 
 from aoc.constants import AOC_SESSION_COOKIE, ROOT, SUBMISSIONS_FILE, URL
+from aoc.watcher import ModificationWatcher, watch
 
-__all__ = ("submit",)
+__all__ = ("submit", "watch", "get_problem_examples")
+
+
+def get_problem_examples(request) -> tuple[str, ...]:
+    soup = bs4.BeautifulSoup(request.text, "lxml")
+    test_input = soup.pre.text.strip()
+
+    current_part = soup.find_all("article")[-1]
+    last_sentence = current_part.find_all("p")[-2]
+    answer = last_sentence.find_all("code")[-1]
+    if not answer.em:
+        answer = last_sentence.find_all("em")[-1]
+
+    answer = answer.text.strip().split()[-1]
+    try:
+        answer = literal_eval(answer)
+    except ValueError:
+        pass
+
+    return test_input, str(answer)
 
 
 def _seconds_to_most_relevant_unit(s):
@@ -34,33 +56,22 @@ def _seconds_to_most_relevant_unit(s):
     return f"{int(s):d}m {s/60%60:.3f}s"
 
 
-def submit(solution: Callable):
+def submit(event: "ModificationWatcher", part: str, solution: typing.Callable):
     """Submit an AoC solution. Submissions are cached."""
-    frame = inspect.stack()[1]
-    submission_file = Path(frame[0].f_code.co_filename).parents
-    day, year = submission_file[0].name, submission_file[1].name
-    day = str(int(day))
-
-    submissions_file = Path(ROOT, f"{year}", SUBMISSIONS_FILE)
-
-    match solution.__name__:
-        case "part_one":
-            part = "1"
-        case "part_two":
-            part = "2"
-        case _:
-            print(f"[red]solution callable has bad name, [bold]{solution.__name__}[/]")
-            return
+    submissions_file = Path(ROOT, f"{event.year}", SUBMISSIONS_FILE)
 
     submissions = json.loads(submissions_file.read_text())
-    current = submissions.setdefault(day, {"1": {}, "2": {}})[part]
+    current = submissions.setdefault(event.day, {"1": {}, "2": {}})[part]
 
     if "solution" in current:
-        print(f"Day {day} part {part} has already been solved. " f"The solution was:\n{current['solution']}.")
+        print(
+            f"event.day {event.day} part {part} has already been solved. "
+            f"The solution was:\n{current['solution']}."
+        )
         return
 
     start_wall, start_cpu = time.perf_counter(), time.process_time()
-    solution = solution()
+    solution = solution(event.data)
     now_wall, now_cpu = time.perf_counter(), time.process_time()
 
     if solution is None:
@@ -69,7 +80,9 @@ def submit(solution: Callable):
     dt_wall = _seconds_to_most_relevant_unit(now_wall - start_wall)
     dt_cpu = _seconds_to_most_relevant_unit(now_cpu - start_cpu)
 
-    print(f"Timer [magenta]{year}.{day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU")
+    print(
+        f"Timer [magenta]{event.year}.{event.day}.part_{part}[/]: [blue]{dt_wall}[/] wall, [blue]{dt_cpu}[/] CPU"
+    )
 
     solution = str(solution)
 
@@ -81,7 +94,7 @@ def submit(solution: Callable):
     while True:
         print(f"Submitting [green bold]{solution}[/] as solution to part {part}...")
         response = httpx.post(
-            url=URL.format(day=day, year=year) + "/answer",
+            url=URL.format(day=event.day, year=event.year) + "/answer",
             cookies={"session": AOC_SESSION_COOKIE},
             data={"level": part, "answer": solution},
         )

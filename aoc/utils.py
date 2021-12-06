@@ -1,14 +1,15 @@
 __all__ = (
-    "extract_ints",
+    "AoCInput",
     "chinese_remainder_theorem",
 )
 
 
-class AoCInput:
-    def __init__(self, fname: str, mode: str = "r") -> None:
-        self.path = open(fname, mode)
+from pathlib import Path
 
-    def get_ints(self, use_regexp=False, regexp=r"-?\d+", as_tuple=False):
+
+class AoCInput:
+    @staticmethod
+    def get_ints(raw, use_regexp=False, regexp=r"-?\d+", as_tuple=False):
         """
         Parse self.path containing whitespace delimited integers into a list of integers.
 
@@ -21,11 +22,12 @@ class AoCInput:
             import re
 
             exp = re.compile(regexp)
-            return kind(map(int, exp.findall(self.path.read())))
+            return kind(map(int, exp.findall(raw)))
 
-        return kind(map(int, self.path.read().split()))
+        return kind(map(int, raw.split()))
 
-    def get_lines(self, rstrip=True, lstrip=True, as_tuple=False):
+    @staticmethod
+    def get_lines(raw, rstrip=True, lstrip=True, as_tuple=False):
         """
         Read file into a list (or tuple) of lines.
 
@@ -33,7 +35,8 @@ class AoCInput:
         Returns a list of strings by default, or a tuple if as_tuple=True.
         """
         kind = tuple if as_tuple else list
-        lines = map(lambda l: l.rstrip("\n"), self.path)
+        lines = map(lambda l: l.rstrip("\n"), raw.split("\n"))
+        lines = [line for line in lines if line != ""]
 
         if rstrip and lstrip:
             return kind(map(str.strip, lines))
@@ -43,6 +46,10 @@ class AoCInput:
             return kind(map(str.lstrip, lines))
         else:
             return kind(lines)
+
+    @staticmethod
+    def get_raw(path: str) -> str:
+        return Path(path).read_text()
 
 
 def chinese_remainder_theorem(moduli, residues):

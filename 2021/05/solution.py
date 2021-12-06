@@ -4,26 +4,15 @@ from collections import Counter
 import aoc
 from aoc.utils import AoCInput
 
-data = AoCInput("2021/05/input.txt").get_lines()
+
+def parse_data(raw):
+    return AoCInput.get_lines(raw)
 
 
-def get_coors(x1, y1, x2, y2):
-    if x1 == x2:
-        return [(x1, int(i)) for i in range(y1, y2 + 1, int(abs(y2 - y1) / (y2 - y1)))]
-    if x1 > x2:
-        x1, x2 = x2, x1
-        y1, y2 = y2, y1
-    slope = (y2 - y1) // (x2 - x1)
-    line = []
-    i = 0
-    while x1 + i <= x2:
-        i += 1
-        line.append((x1 + i, y1 + slope * i))
-    return line
-
-
-def part_one():
+def part_one(raw):
+    data = parse_data(raw)
     all_coors = []
+
     for line in data:
         x1, y1, x2, y2 = map(int, re.findall(r"(\d+),(\d+) -> (\d+),(\d+)", line)[0])
         if x1 == x2:
@@ -37,8 +26,10 @@ def part_one():
     return len([coor for coor, n in positions.items() if n >= 2])
 
 
-def part_two():
+def part_two(raw):
+    data = parse_data(raw)
     all_coors = []
+
     for line in data:
         x1, y1, x2, y2 = map(int, re.findall(r"(\d+),(\d+) -> (\d+),(\d+)", line)[0])
         if x1 == x2:
@@ -62,5 +53,5 @@ def part_two():
     return len([coor for coor, n in positions.items() if n >= 2])
 
 
-aoc.submit(part_one)
-aoc.submit(part_two)
+if __name__ == "__main__":
+    aoc.watch()

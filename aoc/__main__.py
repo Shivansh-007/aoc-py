@@ -1,13 +1,16 @@
+import json
 import time
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Union
 
+import bs4
 import click
 import httpx
 from rich import print
 
-from aoc.constants import AOC_SESSION_COOKIE, EST, ROOT, TEMPLATE_FILE
+from aoc import get_problem_examples
+from aoc.constants import AOC_SESSION_COOKIE, EST, EXAMPLE_ANSWERS_FILE, ROOT, TEMPLATE_FILE
 
 TIME_DURATION_UNITS = (
     ("week", 60 * 60 * 24 * 7),
@@ -114,9 +117,24 @@ def start_aoc_day(ctx, day: int, year: int, wait: bool) -> None:
     input_file = Path(day_dir, "input.txt")
     input_file.write_text(problem_input.text)
 
+    # Get problem example input and its answers for writing tests :D
+    example_answers_file = Path(ROOT, f"{year}", EXAMPLE_ANSWERS_FILE)
+    problem = httpx.get(
+        f"https://adventofcode.com/{year}/day/{day}",
+        cookies={"session": AOC_SESSION_COOKIE},
+    )
+    test_input, answer = get_problem_examples(problem)
+    eg_answers = json.loads(example_answers_file.read_text())
+    # Just write the part 1 answer has we have not finished it yet, so we won't be having the inputs :(
+    eg_answers.setdefault(day, {"1": "", "2": ""})["1"] = answer
+    eg_answers[day]["input"] = test_input
+    example_answers_file.write_text(json.dumps(eg_answers, indent=4))
+
+    # Make copy of solution template for the puzzle
     solution = Path(day_dir, "solution.py")
     solution.write_text(TEMPLATE_FILE.format(input_file=input_file.relative_to(ROOT), day=day))
-    print(f"All done! ✨ 🍰 ✨ Good luck!")
+
+    print("All done! ✨ 🍰 ✨ Good luck!")
 
 
 main_cli = click.CommandCollection(sources=[cli])

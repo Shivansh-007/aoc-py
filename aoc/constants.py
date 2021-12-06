@@ -9,6 +9,7 @@ load_dotenv(override=True)
 AOC_SESSION_COOKIE = os.environ.get("AOC_SESSION_COOKIE")
 ROOT = Path(__file__).parent.parent
 SUBMISSIONS_FILE = "submissions.json"
+EXAMPLE_ANSWERS_FILE = "example_answers.json"
 URL = "https://adventofcode.com/{year}/day/{day}"
 EST = ZoneInfo("America/New_York")
 
