@@ -1,6 +1,7 @@
 __all__ = (
     "AoCInput",
     "chinese_remainder_theorem",
+    "erange",
 )
 
 
@@ -63,3 +64,10 @@ def chinese_remainder_theorem(moduli, residues):
     )
 
     return X % N
+
+
+def erange(start, end, step=1):
+    """Range from start to end (included) in steps of +/- step regardless if start > end or end > start."""
+    if start > end:
+        yield from range(start, end - 1, -step)
+    yield from range(start, end + 1, step)
