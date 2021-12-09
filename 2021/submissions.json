@@ -84,5 +84,15 @@
             "solution": "983026",
             "983026": "That's the right answer!  You are one gold star closer to finding the sleigh keys. You got rank 569 on this star's leaderboard.You have completed Day 8! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
         }
+    },
+    "9": {
+        "1": {
+            "solution": "480",
+            "480": "That's the right answer! You are one gold star closer to finding the sleigh keys. [Continue to Part Two]"
+        },
+        "2": {
+            "solution": "1045660",
+            "1045660": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 9! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+        }
     }
 }
