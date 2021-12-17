@@ -1,6 +1,7 @@
 import aoc
 from aoc.utils import AoCInput
 
+
 def parse_data(raw):
     return AoCInput.get_lines(raw)
 
