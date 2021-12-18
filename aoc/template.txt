@@ -4,7 +4,7 @@ from aoc.utils import AoCInput
 
 def parse_data(raw):
     data = AoCInput.get_lines(raw)
-    ...
+    return data
 
 
 def part_one(raw):

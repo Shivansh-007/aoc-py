@@ -18,7 +18,7 @@ def parse_data(raw):
 
 def part_one(raw):
     graph = parse_data(raw)
-    
+
     dfs_stack = [("start",)]
     total = 0
 
@@ -37,7 +37,7 @@ def part_one(raw):
 
 def part_two(raw):
     graph = parse_data(raw)
-    
+
     dfs_stack = [(("start",), False)]
     total = 0
 

@@ -2,6 +2,7 @@ __all__ = (
     "AoCInput",
     "chinese_remainder_theorem",
     "erange",
+    "dot_print",
 )
 
 
@@ -71,3 +72,11 @@ def erange(start, end, step=1):
     if start > end:
         yield from range(start, end - 1, -step)
     yield from range(start, end + 1, step)
+
+
+def dot_print(array):
+    """
+    Pretty print a binary or boolean array.
+    """
+    for row in array:
+        print("".join(" #"[i] for i in row))
