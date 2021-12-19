@@ -125,5 +125,16 @@
             "solution": "RHALRCRA",
             "RHALRCRA": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 13! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
         }
+    },
+    "14": {
+        "1": {
+            "3232": "That's not the right answer; your answer is too high.  If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit.  Please wait one minute before trying again. (You guessed 3232.) [Return to Day 14]",
+            "solution": "3230",
+            "3230": "That's the right answer!  You are one gold star closer to finding the sleigh keys. [Continue to Part Two]"
+        },
+        "2": {
+            "solution": "3542388214529",
+            "3542388214529": "That's the right answer!  You are one gold star closer to finding the sleigh keys.You have completed Day 14! You can [Shareon\n  Twitter\nMastodon] this victory or [Return to Your Advent Calendar]."
+        }
     }
 }
